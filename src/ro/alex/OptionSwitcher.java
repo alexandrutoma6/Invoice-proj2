@@ -1,59 +1,50 @@
 package ro.alex;
 
-import org.w3c.dom.ls.LSOutput;
-
-import java.sql.SQLOutput;
-
 public class OptionSwitcher {
 
     InvoiceService invoiceService = new InvoiceService();
-    public void choseOption(int option){
+    PrintClass print = new PrintClass();
 
-        switch (option){
-
-            case 1:
-                System.out.println("CREARE FACTURA");
-                System.out.println();
-                invoiceService.createInvoice();
-                System.out.println("FACUTRA CREATA!");
-                break;
-
-            case 2:
-                if(invoiceService.isEmpty())
-                    System.out.println("NU EXISTA FACTURI!");
-                else {
-                    invoiceService.viewInvoice();
-                    System.out.println();
-                    invoiceService.modifyInvoice();
-                    System.out.println("FACTURA MODIFICATA");
-                }
-                break;
-
-            case 3:
-                if(invoiceService.isEmpty())
-                    System.out.println("NU EXISTA FACTURI!");
-                else {
-                    invoiceService.viewInvoice();
-                    System.out.println();
-                    System.out.print("Stergeti factura cu index: ");
-                    int index = ReadClass.readInt();
-                    invoiceService.removeInvoice(index);
-                    System.out.println("FACTURA STEARSA!");
-                }
-                break;
-
-            case 4:
-                if(invoiceService.isEmpty())
-                    System.out.println("NU EXISTA FACTURI!");
-                else
-                    invoiceService.viewInvoice();
-                break;
-
-            case 0:
-                System.out.println("EXIT!");
-                break;
-            default:
-                System.out.print("ATI INTRODUS O VALOARE GRESITA!");
+    public void choseOption(int option) {
+        switch (option) {
+            case 1 -> creareFactura();
+            case 2 -> modificareFactura();
+            case 3 -> stergereFactura();
+            case 4 -> afisareFactura();
+            case 0 -> exit();
+            default -> System.out.print("ATI INTRODUS O VALOARE GRESITA!");
         }
     }
+    private void creareFactura () {
+        System.out.println();
+        invoiceService.createInvoice();
+        print.messageInvoiceCreated();
+    }
+    private void modificareFactura(){
+        if(invoiceService.isEmpty()){print.messageNoInvoice();}
+        else {
+            print.printInvoices(invoiceService.getInvoices());
+            System.out.println();
+            invoiceService.modifyInvoice(print.inputModifyInvoice(invoiceService.getInvoices()));
+            print.messageInvoiceModified();
+        }
+    }
+    private void stergereFactura(){
+        if(invoiceService.isEmpty()){print.messageNoInvoice();}
+        else {
+            print.printInvoices(invoiceService.getInvoices());
+            invoiceService.removeInvoice(print.inputDeleteInvoice());
+            print.messageInvoiceDeleted();
+        }
+    }
+    private void afisareFactura(){
+        if(invoiceService.isEmpty()){print.messageNoInvoice();}
+        else {
+            print.printInvoices(invoiceService.getInvoices());
+        }
+    }
+    private void exit(){
+        System.out.println("EXIT!");
+    }
 }
+
