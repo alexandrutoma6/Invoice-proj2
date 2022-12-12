@@ -26,7 +26,7 @@ public class ReadClass {
         }while(!noError);
 
         System.out.print("Company Name: ");
-        String companyName = read.nextLine();
+        String companyName = read.next();
         System.out.print("Address: ");
         Address address = readAddressValidate();
         System.out.print("Date: ");
